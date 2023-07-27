@@ -5,10 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ClientApp"
         mc:Ignorable="d"
-        Title="MainWindow" Height="434" Width="443">
+        Title="Client App" Height="584" Width="736">
     <Canvas>
-        <TextBlock Text="" HorizontalAlignment="Center" VerticalAlignment="Top" Width="249" Canvas.Top="33" Canvas.Left="13" Height="47"></TextBlock>
-        <Button Content="Select Image" Height="63" Width="152" Canvas.Left="272" Canvas.Top="25" HorizontalAlignment="Center" VerticalAlignment="Top" ></Button>
-        <Image Stretch="Fill" Source="https://itingredients.com/wp-content/uploads/2015/06/ChangeIPAddressFromCommandPrompt6-min.png" Height="285" Width="411" Canvas.Left="13" Canvas.Top="107" HorizontalAlignment="Center" VerticalAlignment="Top" ></Image>
+        <TextBlock Name="FileInfoTxtb" FontSize="22" HorizontalAlignment="Left" VerticalAlignment="Center" Width="455" Canvas.Top="33" Canvas.Left="13" Height="47"></TextBlock>
+        <Button Click="Button_Click" Content="Select Image" FontSize="23" Height="63" Width="162" Canvas.Left="533" Canvas.Top="25" HorizontalAlignment="Left" VerticalAlignment="Center" ></Button>
+        <Image Name="SelectedImage" Stretch="Uniform"  Height="285" Width="681" Canvas.Top="107" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="13" />
+        <Button Name="SendBtn" Click="SendBtn_Click" Content="Send Image" FontSize="30" Height="63" Width="320" Canvas.Left="218" Canvas.Top="415" HorizontalAlignment="Left" VerticalAlignment="Center" />
+        <Label Name="serverInfoLbl" FontSize="20" Canvas.Left="13" Canvas.Top="497"></Label>
     </Canvas>
 </Window>

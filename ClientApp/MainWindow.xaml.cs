@@ -14,6 +14,10 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Microsoft.Win32;
+using static System.Net.WebRequestMethods;
+using System.IO;
+using System.Threading;
 
 namespace ClientApp
 {
@@ -25,34 +29,62 @@ namespace ClientApp
         public MainWindow()
         {
             InitializeComponent();
+        }
 
-            var socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+        public OpenFileDialog op = new OpenFileDialog();
 
-            var ipAddress = IPAddress.Parse("10.1.18.1");
-            var port = 27001;
-
-            var ep = new IPEndPoint(ipAddress, port);
-
-            try
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            op.Title = "Select a picture";
+            op.Filter = "All supported graphics|*.jpg;*.jpeg;*.png|" +
+              "JPEG (*.jpg;*.jpeg)|*.jpg;*.jpeg|" +
+              "Portable Network Graphic (*.png)|*.png";
+            if (op.ShowDialog() == true)
             {
-                socket.Connect(ep);
+                SelectedImage.Source = new BitmapImage(new Uri(op.FileName));
+                FileInfoTxtb.Text = op.FileName;
+            }
+        }
 
-                if (socket.Connected)
+        public byte[] getJPGFromImageControl(BitmapImage imageC)
+        {
+            MemoryStream memStream = new MemoryStream();
+            JpegBitmapEncoder encoder = new JpegBitmapEncoder();
+            encoder.Frames.Add(BitmapFrame.Create(imageC));
+            encoder.Save(memStream);
+            return memStream.ToArray();
+        }
+
+        private void SendBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (SelectedImage.Source != null)
+            {
+                var socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                var ipAddress = IPAddress.Parse("192.168.1.30");
+                var port = 80;
+                var ep = new IPEndPoint(ipAddress, port);
+                //var bytess = getJPGFromImageControl(SelectedImage.Source as BitmapImage);
+
+                try
                 {
-                    Console.WriteLine("Connected to server . . .");
-                    while (true)
+                    socket.Connect(ep);
+
+                    if (socket.Connected)
                     {
-                        var msg = Console.ReadLine();
-                        var bytes = Encoding.UTF8.GetBytes(msg);
+                        serverInfoLbl.Content = "Connected Server . . .";
+                        var bytes = getJPGFromImageControl(SelectedImage.Source as BitmapImage);
                         socket.Send(bytes);
                     }
                 }
+                catch (Exception ex)
+                {
+                    serverInfoLbl.Content = ex.Message;
+                }
             }
-            catch (Exception)
+            else
             {
-                Console.WriteLine("Can not connect to the server");
+                MessageBox.Show("Please select a photo !", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
-
         }
     }
 }
