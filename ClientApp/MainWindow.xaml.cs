@@ -60,7 +60,7 @@ namespace ClientApp
             if (SelectedImage.Source != null)
             {
                 var socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                var ipAddress = IPAddress.Parse("192.168.1.30");
+                var ipAddress = IPAddress.Parse("192.168.1.48");
                 var port = 80;
                 var ep = new IPEndPoint(ipAddress, port);
                 //var bytess = getJPGFromImageControl(SelectedImage.Source as BitmapImage);
